@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{ISO8601} %-5level [%t] %logger{1.} - %msg%n"/>
+    </Console>
+    <RollingFile name="RollingFile" fileName="logs/MyReail.log"
+    		filePattern="logs/%d{MM-yyyy}/MyRetail-%d{yyyyMMdd}-%i.log.gz">
+      <PatternLayout pattern="%d{ISO8601} %-5level [%t] %logger{1.} - %msg%n"/>
+      <Policies>
+	      <SizeBasedTriggeringPolicy size="50MB" />
+	      <TimeBasedTriggeringPolicy />
+      </Policies>
+      <DefaultRolloverStrategy max="20">
+	      <Delete maxDepth="2" basePath="logs">
+	         <IfLastModified age="30d" />
+	      </Delete>
+      </DefaultRolloverStrategy>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <Logger name="com.myretail.api" level="DEBUG"/>
+    <Root level="info">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="RollingFile"/>
+    </Root>
+  </Loggers>
+</Configuration>
