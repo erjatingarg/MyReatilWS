@@ -11,14 +11,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.myretail.api.MyReaillApp;
+import com.myretail.api.MyRetailApp;
 import com.myretail.api.entity.Product;
 import com.myretail.api.model.ProductDetails;
 import com.myretail.api.repository.ProductRepository;
 import com.myretail.api.service.ProductDetailsService;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes={MyReaillApp.class})
+@ContextConfiguration(classes={MyRetailApp.class})
 @SpringBootTest
 public class ProductServiceImplIntegrationTest {
 	
