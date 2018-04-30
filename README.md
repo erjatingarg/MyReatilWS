@@ -70,7 +70,7 @@ Sample Response:
     "priceDetails": {
         "productId": 13860428,
         "value": 200,
-        "currency_code": "USD"
+        "currencyCode": "USD"
     }
 }
 -----------------------
@@ -90,7 +90,7 @@ Request Body:-
     "priceDetails": {
         "productId": 13860428,
         "value": 1000,
-        "currency_code": "USD"
+        "currencyCode": "USD"
     }
 }
 
@@ -101,7 +101,7 @@ Response Body:-
     "priceDetails": {
         "productId": 13860428,
         "value": 1000,
-        "currency_code": "USD"
+        "currencyCode": "USD"
     }
 }
 

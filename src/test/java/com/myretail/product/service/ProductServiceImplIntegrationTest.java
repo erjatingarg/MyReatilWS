@@ -9,13 +9,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.myretail.api.MyReaillApp;
 import com.myretail.api.entity.Product;
 import com.myretail.api.model.ProductDetails;
 import com.myretail.api.repository.ProductRepository;
 import com.myretail.api.service.ProductDetailsService;
 
 @RunWith(SpringRunner.class)
+@ContextConfiguration(classes={MyReaillApp.class})
 @SpringBootTest
 public class ProductServiceImplIntegrationTest {
 	
@@ -39,13 +42,13 @@ public class ProductServiceImplIntegrationTest {
 	@Test
 	public void getProduct_Success() throws Exception {
 		ProductDetails productDetails = productDetailsService.getProductDetails(product.getProductId());	
-		assertEquals("79.87", productDetails.getPriceDetails().getValue() );
+		assertEquals("79.87", productDetails.getPriceDetails().getValue().toString() );
 	}
 		
 	private void createProduct() {
 		product = new Product();
 		product.setProductId(1234);
-		product.setCurrency_code("USD");
+		product.setCurrencyCode("USD");
 		product.setValue(new Double(79.87));
 	}
 	

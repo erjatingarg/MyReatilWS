@@ -15,7 +15,7 @@ public class Product {
 	private Double value;
 	
 	@Column(value = "currency")
-	private String currency_code;
+	private String currencyCode;
 
 	public int getProductId() {
 		return productId;
@@ -26,8 +26,6 @@ public class Product {
 		this.productId = productId;
 	}
 
-
-
 	public Double getValue() {
 		return value;
 	}
@@ -36,15 +34,11 @@ public class Product {
 		this.value = value;
 	}
 
-	public String getCurrency_code() {
-		return currency_code;
+	public String getCurrencyCode() {
+		return currencyCode;
 	}
 
-	public void setCurrency_code(String currency_code) {
-		this.currency_code = currency_code;
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
 	}
-
-
-
-
 }

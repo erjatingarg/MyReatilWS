@@ -7,11 +7,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.ContextConfiguration;
+import com.myretail.api.MyReaillApp;
 import com.myretail.api.controller.ProductDetailsController;
 import com.myretail.api.exception.ProductNotFoundException;
 import com.myretail.api.service.ProductDetailsService;
 
 @RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(classes={MyReaillApp.class})
 public class MyRetailProductControllerTest {
 	
 	@InjectMocks
@@ -26,5 +29,4 @@ public class MyRetailProductControllerTest {
 	    .thenThrow(new ProductNotFoundException());
 		productController.getProductDetails(123);
 	}
-
 }
