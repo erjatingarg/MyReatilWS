@@ -24,8 +24,6 @@ public class ProductDetailsController {
 	@Autowired
 	ProductDetailsService productDetailsService;
 	
-	
-	
 	@RequestMapping("/")
 	public String myRetail() {
 		return "Welcome to My Retail!";
@@ -48,5 +46,4 @@ public class ProductDetailsController {
 		log.info(" updated putProductDetails :"+updatedProductDetails);
 		return updatedProductDetails;
 	}
-
 }
