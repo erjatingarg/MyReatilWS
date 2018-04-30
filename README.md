@@ -1,4 +1,4 @@
-# MyReatilWS
+# MyRetailWS
 
 MyRetail Restful service
 
