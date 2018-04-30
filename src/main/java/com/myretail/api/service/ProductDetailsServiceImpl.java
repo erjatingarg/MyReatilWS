@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myretail.api.MyRetailUtil.TestUtils;
 import com.myretail.api.entity.Product;
-import com.myretail.api.model.PriceDetails;
 import com.myretail.api.model.ProductDetails;
 import com.myretail.api.repository.ProductRepository;
 
@@ -28,7 +27,6 @@ import com.myretail.api.repository.ProductRepository;
 @Service(value="productDetailService")
 public class ProductDetailsServiceImpl implements ProductDetailsService {
 	private final Logger log = Logger.getLogger(ProductDetailsServiceImpl.class.getName());
-	private static final String PRODUCT_NOT_FOUND = "No product found for product id %s";
 	
 	@Autowired
 	private ProductRepository productRepository;
@@ -62,25 +60,25 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 		return prodDetails;
 	}
 
-/*	@Override
+	@Override
 	public ProductDetails putProductDetails(int id, ProductDetails newProduct) throws Exception{
 		log.info("in putProductDetails");
 		log.debug(" newProduct : "+newProduct);
 		if(id!=newProduct.getId()){
 			throw new Exception(" Product price cannot be updated, request body json should have matching id with path variable.");
 		}
-		PriceDetails newProductPrice=newProduct.getPriceDetails();
-		if(newProduct.getProductPrice().getCurrencyCode()==null||newProduct.getProductPrice().getPrice()==null){
+		Product newProductPrice=newProduct.getPriceDetails();
+		if(newProduct.getPriceDetails().getCurrency_code()==null||newProduct.getPriceDetails().getValue()==null){
 				throw new Exception(" Please check product price and currency code details, it should not be empty ");
 		}
-		newProductPrice.setId(id);
+		newProductPrice.setProductId(id);
 		String productName=getProductName(id);
 		newProduct.setName(productName);
-		newProductPrice=_productDetailsServiceImpl.updateProductPrice(id,newProduct);
+		newProductPrice=productDetailsServiceImpl.updateProductPrice(id,newProduct);
 		
-		newProduct.setProductPrice(newProductPrice);
+		newProduct.setPriceDetails(newProductPrice);
 		return newProduct;
-	}*/
+	}
 
 
 	
@@ -94,20 +92,20 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 	}
 	
 	
-/*	@CachePut(value = "productPriceCache", key = "#id")
-	public ProductPrice updateProductPrice(int id,ProductDetails newProduct) throws Exception{
+
+	public Product updateProductPrice(int id,ProductDetails newProduct) throws Exception{
 		log.info("in updateProductPrice");
-		ProductPrice newProductPrice=newProduct.getProductPrice();
-		newProductPrice.setId(id);
-		if(productPriceRepository.findById(newProductPrice.getId())!=null){
-			newProductPrice=productPriceRepository.save(newProduct.getProductPrice());
+		Product newProductPrice=newProduct.getPriceDetails();
+		newProductPrice.setProductId(id);
+		if(productRepository.findByProductId(newProductPrice.getProductId())!=null){
+			newProductPrice=productRepository.save(newProduct.getPriceDetails());
 		}else{
 			log.error("price detail null mongo exception thrown");
-			throw new Exception("price details for product with id="+id+" not found in mongo db for collection 'productprice'");
+			throw new Exception("price details for product with id="+id+" not found in Cassandra db");
 		}
 		log.debug("newProductPrice : "+newProductPrice);
 		return newProductPrice;
-	}*/
+	}
 	
 	private String getProductName(int id) throws IOException {
 		log.info("in getProductName");

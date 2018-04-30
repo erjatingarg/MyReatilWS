@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.myretail.api.entity.Product;
 import com.myretail.api.model.ProductDetails;
 import com.myretail.api.service.ProductDetailsService;
 /**
@@ -41,14 +40,13 @@ public class ProductDetailsController {
 		return prodDetails;
 	}
 	
-/*	@RequestMapping(value = "/products/{productId}", method = RequestMethod.PUT)
-    public void updateProductPrice(@RequestBody ProductDetails productDetails,                                        
-                                   @PathVariable int id) throws Exception
-    {
+	@RequestMapping(value="product/{id}",method=RequestMethod.PUT)
+	public ProductDetails putProductDetails(@PathVariable int id,@RequestBody ProductDetails prodDetails) throws Exception{
 		log.info("in controller putProductDetails id :"+id);
-		log.info("in controller putProductDetails requestBody :"+productDetails);
-		Product product = productMapper.toDomainObject(productDetails);
-		productDetailsService.putProductDetails(product);	
-    }*/
+		log.info("in controller putProductDetails requestBody :"+prodDetails);
+		ProductDetails updatedProductDetails=productDetailsService.putProductDetails(id, prodDetails);
+		log.info(" updated putProductDetails :"+updatedProductDetails);
+		return updatedProductDetails;
+	}
 
 }

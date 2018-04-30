@@ -10,18 +10,29 @@ public class Product {
 	@PrimaryKey("id")
 	@Column(value = "id")
 	private int productId;
-
+	
 	@Column(value = "price")
-	private double value;
+	private Double value;
 	
 	@Column(value = "currency")
 	private String currency_code;
 
-	public double getValue() {
+	public int getProductId() {
+		return productId;
+			
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
+
+
+	public Double getValue() {
 		return value;
 	}
 
-	public void setValue(double value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 
@@ -33,12 +44,7 @@ public class Product {
 		this.currency_code = currency_code;
 	}
 
-	public Product(int productId) {
-		super();
-		this.productId = productId;
-	}
 
-	public int getProductId() {
-		return productId;
-	}
+
+
 }

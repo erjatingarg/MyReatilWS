@@ -1,100 +1,111 @@
 # MyReatilWS
-myRetail Restful service
 
-
+MyRetail Restful service
 
 # Technologies
 
 JDK 1.8.0
 
-Mongo 3.2.10
+No SQL Database ( Cassandra 2.2.12 )
 
-Maven 4.0
+Maven 3.5.3
 
-SpringBoot 1.5.3.RELEASE
+SpringBoot 1.4.2.RELEASE
 
 EhCache 
 
-# Mongo DB database and collection
+# Cassandra database and collection
 
-database=myretail
+Cassandra host = localhost
 
-mongodb host=localhost
+KEYSPACE myretail
 
-mongodb port=27017
+Table name = product
 
-mongo collection name =productprice
 
-use myretail
 
-db.productprice.insert({ "_id" : 13860428, "price" : 13.49, "currencyCode" : "USD" })
+CREATE KEYSPACE myretail WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
 
-db.productprice.insert({ "_id" : 50513417,"price" : 100.00, "currencyCode" : "USD" })
+CREATE TABLE myretail.product(id int PRIMARY KEY, price decimal, currency text);
 
-db.productprice.insert({ "_id" : 49102103,"price" : 299.99, "currencyCode" : "USD" })
+INSERT INTO myretail.product (id, price, currency) VALUES(13860428, 56.78, 'USD');
 
 
 # Build, Test and Run application 
 
 
-cd myretail
 
-Then run 
+Run MyRetail application :
+1)Start Cassandra Server
+./cassandra -f
+./cqlsh
+
+
+
+2) Calling myreail API:-
+
+cd myretail
 
 mvn clean package
 
-Then run the jar
-
 java -jar target/myretail-0.0.1-SNAPSHOT.jar
 
-Application will start running on port 8082
+Application will start running on port 8080
 
 
-# Calling myretail api services
+Endpoints for MyRetail operations:
 
-Performing GET request on http://localhost:8082/product/13860428 will return json object with product information and pricing information.
+-----------------------
+1)Get Product:
+HTTP Method : GET
+http://localhost:8080/myretail/products/{productId}
+productId = 13860428
 
-GET http://localhost:8080/product/13860428
+Content-Type: application/json
 
-Response:-
-
+Sample Response:
 {
-  "id": 13860428,
-  "name": "The Big Lebowski (Blu-ray)",
-  "productPrice": {
-    "price": 1000,
-    "currencyCode": "USD"
-  }
+    "id": 13860428,
+    "name": "The Big Lebowski (Blu-ray) (Widescreen)",
+    "priceDetails": {
+        "productId": 13860428,
+        "value": 200,
+        "currency_code": "USD"
+    }
 }
+-----------------------
+2) Update Price:
+HTTP Method : PUT
+http://localhost:8080/myretail/products/{productId}
+productId = 13860428
 
-
-To perform PUT operation, send JSON object with updated price in request body, it will return JSON object with updated pricing information.
-
-PUT http://localhost:8082/product/13860428
+Headers:
+Content-Type: application/json
+Accept: application/json
 
 Request Body:-
-
 {
-  "id": 13860428,
-  "productPrice": {
-    "price": 1000.00,
-    "currencyCode": "USD"
-  }
+    "id": 13860428,
+    "name": "The Big Lebowski (Blu-ray) (Widescreen)",
+    "priceDetails": {
+        "productId": 13860428,
+        "value": 1000,
+        "currency_code": "USD"
+    }
 }
 
-
-Response :-
-
+Response Body:-
 {
-  "id": 13860428,
-  "name": "The Big Lebowski (Blu-ray)",
-  "productPrice": {
-    "price": 1000.00,
-    "currencyCode": "USD"
-  }
+    "id": 13860428,
+    "name": "The Big Lebowski (Blu-ray) (Widescreen)",
+    "priceDetails": {
+        "productId": 13860428,
+        "value": 1000,
+        "currency_code": "USD"
+    }
 }
 
-
-
-
+3) Not Found
+http://localhost:8080/myretail/products/100
+Status: 404
 

@@ -12,5 +12,5 @@ import com.myretail.api.model.ProductDetails;
 public interface ProductDetailsService {
 
 	public ProductDetails getProductDetails(int id) throws Exception;
-	/*public ProductDetails putProductDetails(int id,ProductDetails newProduct) throws Exception;*/
+	public ProductDetails putProductDetails(int id,ProductDetails newProduct) throws Exception;
 }
