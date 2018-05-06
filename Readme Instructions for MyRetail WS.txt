@@ -109,5 +109,3 @@ Response Body:-
 http://localhost:8080/myretail/products/100
 Status: 404
 
-References:-
-https://github.com/eugenp/tutorials/tree/master/persistence-modules/java-cassandra/src/main/java/com/baeldung/cassandra/java/client

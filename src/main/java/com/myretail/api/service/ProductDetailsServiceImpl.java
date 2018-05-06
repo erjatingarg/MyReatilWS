@@ -6,9 +6,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.IOException;
 import org.apache.log4j.Logger;
 import com.myretail.api.MyRetailUtil.TestUtils;
 import com.myretail.api.entity.Product;
@@ -25,7 +25,8 @@ import com.myretail.api.repository.ProductRepository;
 
 @Service(value = "productDetailService")
 public class ProductDetailsServiceImpl implements ProductDetailsService {
-	private final Logger log = Logger.getLogger(ProductDetailsServiceImpl.class.getName());
+	
+	final static Logger log = Logger.getLogger(ProductDetailsServiceImpl.class.getName());
 
 	@Autowired
 	private ProductRepository productRepository;
@@ -42,14 +43,13 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 	}
 
 	@Override
-	public ProductDetails getProductDetails(int id) throws Exception, IOException {
+	public ProductDetails getProductDetails(int id) throws Exception {
 		log.debug("id: " + id);
 		String productName = getProductName(id);
 		log.debug("productName: " + productName);
 		Product prodPrice = productDetailsServiceImpl.getProductPrice(id);
 		if (prodPrice == null) {
-			log.error("price detail exception thrown");
-			throw new Exception("price details for product with id=" + id + " not found in Cassandra db");
+			throw new Exception("Price details for product with id = " + id + " not found in Cassandra db");
 		}
 		ProductDetails prodDetails = new ProductDetails(id, productName, prodPrice);
 		log.debug("prodDetails: " + prodDetails);
@@ -61,12 +61,12 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 		log.debug("newProduct : " + newProduct);
 		if (id != newProduct.getId()) {
 			throw new Exception(
-					" Product price cannot be updated, request body json should have matching id with path variable.");
+					"Product price cannot be updated, request body json should have matching id with path variable.");
 		}
 		Product newProductPrice = newProduct.getPriceDetails();
 		if (newProduct.getPriceDetails().getCurrencyCode() == null
 				|| newProduct.getPriceDetails().getValue() == null) {
-			throw new Exception(" Please check product price and currency code details, it should not be empty.");
+			throw new Exception(" Please check Price value and currency code details, it should not be empty.");
 		}
 		newProductPrice.setProductId(id);
 		String productName = getProductName(id);
@@ -77,9 +77,10 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 	}
 
 	public Product getProductPrice(int id) throws Exception {
-		log.debug("id : " + id);
-		Product prodPrice = productRepository.findByProductId(id);
-		log.debug("prodPrice : " + prodPrice);
+		Product prodPrice = new Product();
+			log.debug("id : " + id);
+			prodPrice = productRepository.findByProductId(id);
+			log.debug("prodPrice : " + prodPrice);
 		return prodPrice;
 	}
 
@@ -89,14 +90,13 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 		if (productRepository.findByProductId(newProductPrice.getProductId()) != null) {
 			newProductPrice = productRepository.save(newProduct.getPriceDetails());
 		} else {
-			log.error("price detail null exception thrown");
-			throw new Exception("price details for product with id=" + id + " not found in Cassandra db");
+			throw new Exception("Product with id = " + id + " not found in Cassandra db");
 		}
 		log.debug("newProductPrice : " + newProductPrice);
 		return newProductPrice;
 	}
 
-	private String getProductName(int id) throws IOException {
+	private String getProductName(int id) throws JsonProcessingException, Exception  {
 		String url = env.getProperty("target.restUrl1") + id + env.getProperty("target.restUrl2");
 		ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 		ObjectMapper mapper = new ObjectMapper();
@@ -123,9 +123,14 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 				}
 			}
 			log.debug("productName : " + productName);
-		} catch (IOException e) {
-			log.error("Parsing failed IOException " + e.getMessage());
-			throw new IOException(e.getMessage());
+		} catch (JsonProcessingException e) {
+			log.error("The Json Response is not in correct format ");
+			String ErrorMessage = ("The Json Response is not in correct format ");
+			throw new Exception(ErrorMessage);
+		} catch (Exception e) {
+			log.error("No Response from API ");
+			String ErrorMessage = ("No Response from API ");
+			throw new Exception(ErrorMessage);
 		}
 		return productName;
 	}
